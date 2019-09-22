@@ -83,8 +83,46 @@ app.post('/api/attendee', function(req, res) {
  *    DELETE: deletes attendee by id
  */
 
-app.get('/api/attendee/:id', function(req, res) {});
+app.get('/api/attendee/:id', function(req, res) {
+  db.collection(ATTENDEE_COLLECTION).findOne(
+    { _id: new ObjectID(req.params.id) },
+    function(err, doc) {
+      if (err) {
+        handleError(res, err.message, 'Failed to get attendee');
+      } else {
+        res.status(200).json(doc);
+      }
+    }
+  );
+});
 
-app.put('/api/attendee/:id', function(req, res) {});
+app.put('/api/attendee/:id', function(req, res) {
+  const updateDoc = req.body;
+  delete updateDoc._id;
 
-app.delete('/api/attendee/:id', function(req, res) {});
+  db.collection(ATTENDEE_COLLECTION).updateOne(
+    { _id: new ObjectID(req.params.id) },
+    updateDoc,
+    function(err, doc) {
+      if (err) {
+        handleError(res, err.message, 'Failed to update attendee');
+      } else {
+        updateDoc._id = req.params.id;
+        res.status(200).json(updateDoc);
+      }
+    }
+  );
+});
+
+app.delete('/api/attendee/:id', function(req, res) {
+  db.collection(ATTENDEE_COLLECTION).deleteOne(
+    { _id: new ObjectID(req.params.id) },
+    function(err, result) {
+      if (err) {
+        handleError(res, err.message, 'Failed to delete attendee');
+      } else {
+        res.status(200).json(req.params.id);
+      }
+    }
+  );
+});
