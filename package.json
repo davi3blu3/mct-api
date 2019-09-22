@@ -1,0 +1,22 @@
+{
+  "name": "mct-test",
+  "version": "1.0.0",
+  "description": "node express server connecting to mongodb in heroku",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "mongodb",
+    "heroku"
+  ],
+  "author": "davi3blu3",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.3.2"
+  }
+}
