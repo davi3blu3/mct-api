@@ -4,6 +4,7 @@ const mongodb = require('mongodb');
 const ObjectID = mongodb.ObjectID;
 
 const ATTENDEE_COLLECTION = 'attendees';
+const USER_COLLECTION = 'users';
 
 const app = express();
 app.use(bodyParser.json());
@@ -39,6 +40,31 @@ function handleError(res, reason, message, code) {
   console.log('ERROR: ' + reason);
   res.status(code || 500).json({ error: message });
 }
+
+/*  "/api/user"
+ *    ..."/signup" - POST: creates a new user
+ *    ..."/login" - POST: validate user and return token
+ *    ..."/change_pw" - POST: email validation link
+ *    ..."/reset_pw" - PUT: update user password
+ */
+
+app.post('/api/user/signup', function(req, res) {
+  console.log('server received:', req);
+  // check if username and password both present
+
+  // check if username already exists
+
+  // create new user - encrypt password and store to db
+  const newUser = req.body;
+
+  db.collection(USER_COLLECTION).insertOne(newUser, function(err, doc) {
+    if (err) {
+      handleError(res, err.message, 'Failed to create new user.');
+    } else {
+      res.status(201).json(doc.ops[0]);
+    }
+  });
+});
 
 /*  "/api/attendee"
  *    GET: finds all attendees
