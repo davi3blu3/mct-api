@@ -63,13 +63,16 @@ app.post('/api/user/signup', (req, res) => {
   console.log('searching for ', req.body.username);
   db.collection(USER_COLLECTION).findOne(
     { username: req.body.username },
-    (err, doc) => {
+    (err, result) => {
       if (err) {
         console.log(err);
         handleError(res, 'findOne error', 'username lookup error');
-      } else if (doc) {
-        console.log(doc);
-        res.status(200).json(doc);
+      } else if (result) {
+        console.log('findOne result:', result);
+        res.status(200).json(result);
+      } else {
+        console.log('nothing found with this name!');
+        res.status(200);
       }
     }
   );
