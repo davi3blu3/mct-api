@@ -60,7 +60,9 @@ app.post('/api/user/signup', (req, res) => {
 
     // check if username already exists
   } else if (
-    db.collection.countDocuments({ username: req.body.username }, (limit = 1))
+    db
+      .collection(USER_COLLECTION)
+      .countDocuments({ username: req.body.username }, (limit = 1))
   ) {
     handleError(
       res,
