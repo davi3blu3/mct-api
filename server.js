@@ -57,9 +57,22 @@ app.post('/api/user/signup', (req, res) => {
       'Must submit a valid username and password',
       400
     );
+  }
+  let exists;
 
-    // check if username already exists
-  } else if (
+  db.collection(USER_COLLECTION).countDocuments(
+    {
+      username: req.body.username
+    },
+    (err, result) => {
+      if (err) console.log(err);
+      if (result) exists = result;
+    }
+  );
+  console.log('exists?', exists);
+
+  // check if username already exists
+  if (
     db
       .collection(USER_COLLECTION)
       .countDocuments({ username: req.body.username }, (limit = 1))
