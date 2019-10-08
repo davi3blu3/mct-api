@@ -60,17 +60,13 @@ app.post('/api/user/signup', (req, res) => {
   }
 
   // check if username already exists
+  console.log('searching for ', req.body.username);
   db.collection(USER_COLLECTION).findOne(
     { username: req.body.username },
-    function(err, doc) {
+    (err, doc) => {
       if (err) {
-        handleError(
-          res,
-          err.message,
-          'Failed to find user ' + req.body.username
-        );
-      } else {
-        console.log(req.body.username, 'exists!');
+        console.log(err);
+      } else if (doc) {
         console.log(doc);
       }
     }
@@ -79,13 +75,13 @@ app.post('/api/user/signup', (req, res) => {
   // create new user and store to db
   const newUser = req.body;
   // TODO : encrypt pw
-  db.collection(USER_COLLECTION).insertOne(newUser, (err, doc) => {
-    if (err) {
-      handleError(res, err.message, 'Failed to create new user.');
-    } else {
-      res.status(201).json(doc.ops[0]);
-    }
-  });
+  // db.collection(USER_COLLECTION).insertOne(newUser, (err, doc) => {
+  //   if (err) {
+  //     handleError(res, err.message, 'Failed to create new user.');
+  //   } else {
+  //     res.status(201).json(doc.ops[0]);
+  //   }
+  // });
 });
 
 /*  "/api/attendee"
