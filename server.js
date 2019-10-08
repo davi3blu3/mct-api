@@ -60,33 +60,32 @@ app.post('/api/user/signup', (req, res) => {
   }
 
   // check if username already exists
-  console.log('searching for ', req.body.username);
   db.collection(USER_COLLECTION).findOne(
     { username: req.body.username },
     (err, result) => {
       if (err) {
-        console.log(err);
-        handleError(res, 'findOne error', 'username lookup error');
+        handleError(res, err.message, 'Failed to create new user.');
       } else if (result) {
-        console.log('findOne result:', result);
-        res.status(200).json(result);
+        handleError(
+          res,
+          'Duplicate username',
+          'This username is already taken.',
+          400
+        );
       } else {
-        console.log('nothing found with this name!');
-        res.status(200).send('not found');
+        // create new user and store to db
+        const newUser = req.body;
+        // TODO : encrypt pw
+        db.collection(USER_COLLECTION).insertOne(newUser, (err, doc) => {
+          if (err) {
+            handleError(res, err.message, 'Failed to create new user.');
+          } else {
+            res.status(201).json(doc.ops[0]);
+          }
+        });
       }
     }
   );
-
-  // create new user and store to db
-  // const newUser = req.body;
-  // TODO : encrypt pw
-  // db.collection(USER_COLLECTION).insertOne(newUser, (err, doc) => {
-  //   if (err) {
-  //     handleError(res, err.message, 'Failed to create new user.');
-  //   } else {
-  //     res.status(201).json(doc.ops[0]);
-  //   }
-  // });
 });
 
 /*  "/api/attendee"
