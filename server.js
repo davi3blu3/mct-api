@@ -72,7 +72,7 @@ app.post('/api/user/signup', (req, res) => {
         res.status(200).json(result);
       } else {
         console.log('nothing found with this name!');
-        res.status(200);
+        res.status(200).send('not found');
       }
     }
   );
