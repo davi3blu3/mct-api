@@ -49,21 +49,27 @@ function handleError(res, reason, message, code) {
  */
 
 app.post('/api/user/signup', function(req, res) {
-  console.log('server received:', req);
   // check if username and password both present
+  if (!req.body.username || !req.body.password) {
+    handleError(res, err.message, 'Must submit a valid username and password');
 
-  // check if username already exists
-
-  // create new user - encrypt password and store to db
-  const newUser = req.body;
-
-  db.collection(USER_COLLECTION).insertOne(newUser, function(err, doc) {
-    if (err) {
-      handleError(res, err.message, 'Failed to create new user.');
-    } else {
-      res.status(201).json(doc.ops[0]);
-    }
-  });
+    // check if username already exists
+  } else if (
+    db.collection.countDocuments({ username: req.body.username }, (limit = 1))
+  ) {
+    handleError(res, err.message, 'This username is already taken');
+  } else {
+    // create new user and store to db
+    const newUser = req.body;
+    // TODO : encrypt pw
+    db.collection(USER_COLLECTION).insertOne(newUser, function(err, doc) {
+      if (err) {
+        handleError(res, err.message, 'Failed to create new user.');
+      } else {
+        res.status(201).json(doc.ops[0]);
+      }
+    });
+  }
 });
 
 /*  "/api/attendee"
