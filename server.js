@@ -48,21 +48,31 @@ function handleError(res, reason, message, code) {
  *    ..."/reset_pw" - PUT: update user password
  */
 
-app.post('/api/user/signup', function(req, res) {
+app.post('/api/user/signup', (req, res) => {
   // check if username and password both present
   if (!req.body.username || !req.body.password) {
-    handleError(res, err.message, 'Must submit a valid username and password');
+    handleError(
+      res,
+      'username or password missing from req',
+      'Must submit a valid username and password',
+      400
+    );
 
     // check if username already exists
   } else if (
     db.collection.countDocuments({ username: req.body.username }, (limit = 1))
   ) {
-    handleError(res, err.message, 'This username is already taken');
+    handleError(
+      res,
+      'new username already exists',
+      'This username is already taken',
+      400
+    );
   } else {
     // create new user and store to db
     const newUser = req.body;
     // TODO : encrypt pw
-    db.collection(USER_COLLECTION).insertOne(newUser, function(err, doc) {
+    db.collection(USER_COLLECTION).insertOne(newUser, (err, doc) => {
       if (err) {
         handleError(res, err.message, 'Failed to create new user.');
       } else {
