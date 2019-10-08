@@ -59,6 +59,7 @@ app.post('/api/user/signup', (req, res) => {
     );
   }
 
+  // check if username already exists
   db.collection(USER_COLLECTION).findOne(
     { username: req.body.username },
     function(err, doc) {
@@ -70,12 +71,10 @@ app.post('/api/user/signup', (req, res) => {
         );
       } else {
         console.log(req.body.username, 'exists!');
-        res.status(200).json(doc);
+        console.log(doc);
       }
     }
   );
-
-  // check if username already exists
 
   // create new user and store to db
   const newUser = req.body;
