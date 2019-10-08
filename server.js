@@ -69,7 +69,7 @@ app.post('/api/user/signup', (req, res) => {
         handleError(res, 'findOne error', 'username lookup error');
       } else if (doc) {
         console.log(doc);
-        res.status(200).json(docs);
+        res.status(200).json(doc);
       }
     }
   );
