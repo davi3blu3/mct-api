@@ -71,6 +71,7 @@ app.post('/api/user/signup', (req, res) => {
       }
     }
   );
+  res.status(200);
 
   // create new user and store to db
   const newUser = req.body;
