@@ -67,6 +67,7 @@ app.post('/api/user/signup', (req, res) => {
         handleError(res, err.message, 'Failed to create new user.');
       } else if (result) {
         console.log('FindOne Result:', result);
+        res.sendStatus(200);
         // handleError(
         //   res,
         //   'Duplicate username',
