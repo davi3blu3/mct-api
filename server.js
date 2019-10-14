@@ -33,7 +33,7 @@ mongodb.MongoClient.connect(
   }
 );
 
-// ATTENDEE API ROUTES BELOW
+// USER API ROUTES BELOW
 
 // Generic error handler used by all endpoints.
 function handleError(res, reason, message, code) {
@@ -66,27 +66,30 @@ app.post('/api/user/signup', (req, res) => {
       if (err) {
         handleError(res, err.message, 'Failed to create new user.');
       } else if (result) {
-        handleError(
-          res,
-          'Duplicate username',
-          'This username is already taken.',
-          400
-        );
+        console.log('FindOne Result:', result);
+        // handleError(
+        //   res,
+        //   'Duplicate username',
+        //   'This username is already taken.',
+        //   400
+        // );
       } else {
         // create new user and store to db
-        const newUser = req.body;
-        // TODO : encrypt pw
-        db.collection(USER_COLLECTION).insertOne(newUser, (err, doc) => {
-          if (err) {
-            handleError(res, err.message, 'Failed to create new user.');
-          } else {
-            res.status(201).json(doc.ops[0]);
-          }
-        });
+        // const newUser = req.body;
+        // // TODO : encrypt pw
+        // db.collection(USER_COLLECTION).insertOne(newUser, (err, doc) => {
+        //   if (err) {
+        //     handleError(res, err.message, 'Failed to create new user.');
+        //   } else {
+        //     res.status(201).json(doc.ops[0]);
+        //   }
+        // });
       }
     }
   );
 });
+
+// ATTENDEE API ROUTES BELOW
 
 /*  "/api/attendee"
  *    GET: finds all attendees
