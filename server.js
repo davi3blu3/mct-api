@@ -75,6 +75,8 @@ app.post('/api/user/signup', (req, res) => {
         //   400
         // );
       } else {
+        console.log('No result found');
+        res.sendStatus(200);
         // create new user and store to db
         // const newUser = req.body;
         // // TODO : encrypt pw
