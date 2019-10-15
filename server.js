@@ -57,39 +57,36 @@ app.post('/api/user/signup', (req, res) => {
       'Must submit a valid username and password',
       400
     );
-  }
-
-  // check if username already exists
-  db.collection(USER_COLLECTION).findOne(
-    { username: req.body.username },
-    (err, result) => {
-      if (err) {
-        handleError(res, err.message, 'Failed to create new user.');
-      } else if (result) {
-        console.log('FindOne Result:', result);
-        res.sendStatus(200);
-        // handleError(
-        //   res,
-        //   'Duplicate username',
-        //   'This username is already taken.',
-        //   400
-        // );
-      } else {
-        console.log('No result found');
-        res.sendStatus(200);
-        // create new user and store to db
-        // const newUser = req.body;
-        // // TODO : encrypt pw
-        // db.collection(USER_COLLECTION).insertOne(newUser, (err, doc) => {
-        //   if (err) {
-        //     handleError(res, err.message, 'Failed to create new user.');
-        //   } else {
-        //     res.status(201).json(doc.ops[0]);
-        //   }
-        // });
+  } else {
+    // check if username already exists
+    db.collection(USER_COLLECTION).findOne(
+      { username: req.body.username },
+      (err, result) => {
+        if (err) {
+          handleError(res, err.message, 'Failed to create new user.');
+        } else if (result) {
+          console.log('FindOne Result:', result);
+          handleError(
+            res,
+            'Duplicate username',
+            'This username is already taken.',
+            400
+          );
+        } else {
+          // create new user and store to db
+          const newUser = req.body;
+          // TODO : encrypt pw
+          db.collection(USER_COLLECTION).insertOne(newUser, (err, doc) => {
+            if (err) {
+              handleError(res, err.message, 'Failed to create new user.');
+            } else {
+              res.status(201).json(doc.ops[0]);
+            }
+          });
+        }
       }
-    }
-  );
+    );
+  }
 });
 
 // ATTENDEE API ROUTES BELOW
