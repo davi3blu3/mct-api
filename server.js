@@ -82,8 +82,8 @@ app.post('/api/user/signup', (req, res) => {
             if (err) {
               handleError(res, err.message, 'Failed to create new user.');
             } else {
-              console.log(doc);
-              email.register(doc.username);
+              console.log(doc.ops[0].username);
+              email.register(doc.ops[0].username);
               res.status(201).json(doc.ops[0]);
             }
           });
