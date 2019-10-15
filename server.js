@@ -9,6 +9,8 @@ const USER_COLLECTION = 'users';
 const app = express();
 app.use(bodyParser.json());
 
+const email = require('./email.controller');
+
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
 let db;
 
@@ -80,6 +82,8 @@ app.post('/api/user/signup', (req, res) => {
             if (err) {
               handleError(res, err.message, 'Failed to create new user.');
             } else {
+              console.log(doc);
+              email.register(doc.username);
               res.status(201).json(doc.ops[0]);
             }
           });
